@@ -1,5 +1,5 @@
 ## Cloud Infrastructure Security Assessment Tool
-A Cloud Infrastructure security assessment tool for identifying security misconfigurations in terraform code before it gets deployed.
+"Hades-Warden" is a Cloud Infrastructure security assessment tool for identifying security misconfigurations in terraform code before it gets deployed.
 
 ### Overview
 Terraform configurations are assessed against a set of security policies. From this it generates security findings with severity, affected 

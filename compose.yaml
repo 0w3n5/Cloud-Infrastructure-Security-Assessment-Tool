@@ -1,0 +1,16 @@
+# hades-warden-api
+# Builds a Docker image using Dockerfile
+# Operates over port 8000
+# Automatically restarts the application if the container stops
+services:
+  hades-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: hades-warden-api
+
+    ports:
+      - "8000:8000"
+
+    restart: unless-stopped

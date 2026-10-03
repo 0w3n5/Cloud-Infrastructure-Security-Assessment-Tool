@@ -1,0 +1,63 @@
+from hades.policies.security_group import check_ssh_exposure
+
+
+def test_ssh_open_to_internet():
+    rules = [
+        {
+            "from_port": 22,
+            "to_port": 22,
+            "protocol": "tcp",
+            "cidr_blocks": ["0.0.0.0/0"],
+        }
+    ]
+
+    findings = check_ssh_exposure("test-sg", rules)
+
+    assert len(findings) == 1
+    assert findings[0]["rule"] == "AWS-SG-001"
+    assert findings[0]["severity"] == "HIGH"
+
+
+def test_ssh_restricted_to_trusted_ip():
+    rules = [
+        {
+            "from_port": 22,
+            "to_port": 22,
+            "protocol": "tcp",
+            "cidr_blocks": ["192.168.1.0/24"],
+        }
+    ]
+
+    findings = check_ssh_exposure("test-sg", rules)
+
+    assert findings == []
+
+
+def test_non_ssh_port_is_allowed():
+    rules = [
+        {
+            "from_port": 80,
+            "to_port": 80,
+            "protocol": "tcp",
+            "cidr_blocks": ["0.0.0.0/0"],
+        }
+    ]
+
+    findings = check_ssh_exposure("test-sg", rules)
+
+    assert findings == []
+
+def test_ssh_inside_port_range_is_blocked():
+	rules = [
+	    {
+		"from_port": 20,
+		"to_port": 80,
+                "protocol": "tcp",
+                "cidr_blocks": ["0.0.0.0/0"],
+	    }
+	]
+
+	findings = check_ssh_exposure("test-sg", rules)
+
+	assert len(findings) == 1
+	assert findings[0]["rule"] == "AWS-SG-001"

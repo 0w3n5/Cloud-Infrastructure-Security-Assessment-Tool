@@ -1,0 +1,20 @@
+# Hades-Warden assessment engine
+# This module connects the scanner to our security policies
+
+from hades.policies.security_group import check_ssh_exposure
+from hades.scanner.terraform import parse_terraform
+
+def assess_terraform(terraform_code:str) -> list:
+	"""
+	Parse Terraform and run Hades-Warden security policies.
+	"""
+
+	# Convert Terraform into structured Python data
+	terraform = parse_terraform(terraform_code)
+
+	findings []
+
+	# Terraform resources are returned as a list
+	resources = terraform.get("resource", [])
+
+	for resource_group
